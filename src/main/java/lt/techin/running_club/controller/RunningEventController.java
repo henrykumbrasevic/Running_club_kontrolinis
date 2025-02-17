@@ -10,6 +10,7 @@ import lt.techin.running_club.service.RunningEventService;
 import lt.techin.running_club.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -55,7 +56,7 @@ public class RunningEventController {
   }
 
   @PostMapping("/events/{eventId}/register")
-  public ResponseEntity<?> registerForEvent(@PathVariable long eventId, @Valid @RequestBody RegistrationRequestDTO registrationRequestDTO) {
+  public ResponseEntity<?> registerForEvent(@PathVariable long eventId, @Valid @RequestBody RegistrationRequestDTO registrationRequestDTO, Authentication authentication) {
     Optional<RunningEvent> runningEvent = runningEventService.findById(eventId);
     if (runningEvent.isEmpty()) {
       return ResponseEntity.notFound().build();
@@ -64,6 +65,7 @@ public class RunningEventController {
     if (user.isEmpty()) {
       return ResponseEntity.notFound().build();
     }
+    
     Registration registration = new Registration();
     registration.setUser(user.get());
     registration.setRunningEvent(runningEvent.get());
@@ -74,6 +76,18 @@ public class RunningEventController {
             .path("/{id}")
             .buildAndExpand(registration.getId())
             .toUri()).body(RegistrationMapper.toRegistrationResponseDTO(registration));
+  }
+
+  @GetMapping("/events/{eventId}/participants")
+  public ResponseEntity<?> getParticipants(@PathVariable long eventId) {
+    Optional<RunningEvent> runningEvent = runningEventService.findById(eventId);
+    if (runningEvent.isEmpty()) {
+      return ResponseEntity.notFound().build();
+    }
+    List<User> participants = runningEvent.get().getRegistrations().stream()
+            .map(Registration::getUser).toList();
+
+    return ResponseEntity.ok(UserMapper.toParticipantsResponseDTOList(participants));
   }
 
 }

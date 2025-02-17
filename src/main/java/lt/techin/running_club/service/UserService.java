@@ -15,20 +15,23 @@ import java.util.Optional;
 public class UserService {
 
   private final UserRepository userRepository;
+  private final PasswordEncoder passwordEncoder;
 
   @Autowired
-  public UserService(UserRepository userRepository) {
+  public UserService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
     this.userRepository = userRepository;
+    this.passwordEncoder = passwordEncoder;
   }
 
   public List<User> findAllUsers() {
     return userRepository.findAll();
   }
 
-  public User saveUser(User user) {
-    return userRepository.save(user);
+  public User save(UserRequestDTO userRequestDTO) {
+    User user = new User(userRequestDTO.username(), passwordEncoder.encode(userRequestDTO.password()), userRequestDTO.roles());
+    userRepository.save(user);
+    return user;
   }
-
   public Optional<User> findUserByUsername(String username) {
     return userRepository.findByUsername(username);
   }

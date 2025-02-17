@@ -31,9 +31,7 @@ public class UserController {
   @PostMapping("/auth/register")
   public ResponseEntity<?> addUser(@RequestBody @Valid UserRequestDTO userRequestDTO) {
 
-    User user = UserMapper.toUser(userRequestDTO);
-    user.setPassword(passwordEncoder.encode(userRequestDTO.password()));
-    User savedUser = userService.saveUser(UserMapper.toUser(userRequestDTO));
+    User savedUser = userService.save(userRequestDTO);
 
     return ResponseEntity.created(ServletUriComponentsBuilder.fromCurrentRequest()
                     .path("/{id}")
@@ -50,4 +48,5 @@ public class UserController {
     userService.deleteUserById(id);
     return ResponseEntity.noContent().build();
   }
+
 }

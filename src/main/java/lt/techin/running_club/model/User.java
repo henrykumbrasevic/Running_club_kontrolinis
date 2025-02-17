@@ -28,7 +28,7 @@ public class User implements UserDetails {
   private List<Registration> registrations;
 
 
-  public User(String username, String password, List<Role> roles, List<Registration>registrations) {
+  public User(String username, String password, List<Role> roles) {
     this.username = username;
     this.password = password;
     this.roles = roles;

@@ -2,7 +2,6 @@ package lt.techin.running_club.dto;
 
 
 import lt.techin.running_club.model.User;
-import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 
@@ -32,4 +31,13 @@ public class UserMapper {
         user.setUsername(userRequestDTO.username());
         user.setRoles(userRequestDTO.roles());
     }
+    public static ParticipantsResponseDTO toParticipantResponseDTO(User user) {
+        return new ParticipantsResponseDTO(user.getId(), user.getUsername());
+    }
+
+    public static List<ParticipantsResponseDTO> toParticipantsResponseDTOList(List<User> users) {
+        return users.stream().map(UserMapper::toParticipantResponseDTO).toList();
+    }
+
+
 }
