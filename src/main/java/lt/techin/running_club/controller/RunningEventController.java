@@ -9,7 +9,6 @@ import lt.techin.running_club.service.RegistrationService;
 import lt.techin.running_club.service.RunningEventService;
 import lt.techin.running_club.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -58,7 +57,7 @@ public class RunningEventController {
   }
 
   @PostMapping("/events/{eventId}/register")
-  public ResponseEntity<?> registerForEvent(@PathVariable long eventId, @Valid @RequestBody RegistrationRequestDTO registrationRequestDTO, Authentication authentication) {
+  public ResponseEntity<?> registerForEvent(@PathVariable long eventId, @Valid @RequestBody RegistrationRequestDTO registrationRequestDTO) {
     Optional<RunningEvent> runningEvent = runningEventService.findById(eventId);
     if (runningEvent.isEmpty()) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No event available under given ID.");
@@ -67,7 +66,6 @@ public class RunningEventController {
     if (user.isEmpty()) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No user available under given ID.");
     }
-
     Registration registration = new Registration();
     registration.setUser(user.get());
     registration.setRunningEvent(runningEvent.get());
@@ -84,7 +82,7 @@ public class RunningEventController {
   public ResponseEntity<?> getParticipants(@PathVariable long eventId) {
     Optional<RunningEvent> runningEvent = runningEventService.findById(eventId);
     if (runningEvent.isEmpty()) {
-      return ResponseEntity.notFound().build();
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No event available under given ID.");
     }
     List<User> participants = runningEvent.get().getRegistrations().stream()
             .map(Registration::getUser).toList();

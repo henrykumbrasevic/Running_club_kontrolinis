@@ -15,7 +15,7 @@ public record RunningEventRequestDTO(
         @NotNull
         @Pattern(regexp = "^[A-Za-z0-9_\\-]+$", message = "No special symbols allowed. Only letters and numbers.")
         String location,
-        @Min(value = 1, message = "At least 1 participant should be entered.")
+        @Min(value = 1, message = "There has to be at least 1 participant")
         int maxParticipants) {
 
 }
