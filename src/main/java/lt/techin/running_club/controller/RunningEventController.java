@@ -84,10 +84,9 @@ public class RunningEventController {
     if (runningEvent.isEmpty()) {
       return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No event available under given ID.");
     }
-    List<User> participants = runningEvent.get().getRegistrations().stream()
-            .map(Registration::getUser).toList();
+    List<User> eventParticipants = runningEvent.get().getRegistrations().stream().map(Registration::getUser).toList();
 
-    return ResponseEntity.ok(UserMapper.toParticipantsResponseDTOList(participants));
+    return ResponseEntity.ok(UserMapper.toParticipantsResponseDTOList(eventParticipants));
   }
 
 }
