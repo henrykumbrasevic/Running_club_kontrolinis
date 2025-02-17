@@ -9,7 +9,7 @@ import java.util.List;
 
 public record UserRequestDTO(
         @NotNull
-        @Pattern(regexp = "^[a-z0-9_\\-]+$", message = "username must consist only of lowercase letters.")
+        @Pattern(regexp = "^[a-z0-9_\\-]+$", message = "username can't have capital letters.")
         @Size(min = 4, message = "username must have at least 4 characters.")
         String username,
         @NotNull

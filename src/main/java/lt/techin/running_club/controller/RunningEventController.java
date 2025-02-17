@@ -9,6 +9,8 @@ import lt.techin.running_club.service.RegistrationService;
 import lt.techin.running_club.service.RunningEventService;
 import lt.techin.running_club.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
@@ -42,12 +44,12 @@ public class RunningEventController {
   }
 
   @DeleteMapping("/events/{eventId}")
-  public ResponseEntity<Void> deleteRunningEvent(@PathVariable long eventId) {
+  public ResponseEntity<?> deleteRunningEvent(@PathVariable long eventId) {
     if (!runningEventService.existsById(eventId)) {
-      return ResponseEntity.notFound().build();
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No event available under given ID.");
     }
     runningEventService.deleteById(eventId);
-    return ResponseEntity.noContent().build();
+    return ResponseEntity.status(HttpStatus.NO_CONTENT).body("The event has successfully been deleted. Nothing to display.");
   }
 
   @GetMapping("/events")
@@ -59,13 +61,13 @@ public class RunningEventController {
   public ResponseEntity<?> registerForEvent(@PathVariable long eventId, @Valid @RequestBody RegistrationRequestDTO registrationRequestDTO, Authentication authentication) {
     Optional<RunningEvent> runningEvent = runningEventService.findById(eventId);
     if (runningEvent.isEmpty()) {
-      return ResponseEntity.notFound().build();
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No event available under given ID.");
     }
     Optional<User> user = userService.findById(registrationRequestDTO.user().getId());
     if (user.isEmpty()) {
-      return ResponseEntity.notFound().build();
+      return ResponseEntity.status(HttpStatus.NOT_FOUND).body("No user available under given ID.");
     }
-    
+
     Registration registration = new Registration();
     registration.setUser(user.get());
     registration.setRunningEvent(runningEvent.get());

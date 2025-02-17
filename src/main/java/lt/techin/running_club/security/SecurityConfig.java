@@ -21,10 +21,10 @@ public class SecurityConfig {
                 .httpBasic(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize -> authorize
                         .requestMatchers(HttpMethod.POST, "api/auth/register").permitAll()
-                        .requestMatchers(HttpMethod.POST, "api/events").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "api/events/{eventId}").permitAll()
-                        .requestMatchers(HttpMethod.GET, "api/events/*/participants").permitAll()
-                        .anyRequest().permitAll());
+                        .requestMatchers(HttpMethod.POST, "api/events").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.DELETE, "api/events/{eventId}").hasRole("ADMIN")
+                        .requestMatchers(HttpMethod.GET, "api/events/*/participants").hasRole("ADMIN")
+                        .anyRequest().authenticated());
 
         return http.build();
     }
