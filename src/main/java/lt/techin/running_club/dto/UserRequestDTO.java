@@ -12,8 +12,8 @@ public record UserRequestDTO(
         @Pattern(regexp = "^[a-z0-9_\\-]+$", message = "username must consist only of lowercase letters.")
         @Size(min = 4, message = "username must have at least 4 characters.")
         String username,
-        @NotNull
-        @Size(min = 6, message = "password must have at least 6 characters.")
+//        @NotNull
+//        @Size(min = 6, message = "password must have at least 6 characters.")
         String password,
         @NotNull
         List<Role> roles) {

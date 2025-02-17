@@ -31,6 +31,9 @@ public class RunningEvent {
     this.maxParticipants = maxParticipants;
   }
 
+  public RunningEvent(){
+
+  }
   public String getLocation() {
     return location;
   }

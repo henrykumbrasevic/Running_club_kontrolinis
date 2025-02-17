@@ -26,6 +26,9 @@ public class Registration {
     this.runningEvent = runningEvent;
     this.registrationDate = registrationDate;
   }
+  public Registration(){
+
+  }
 
   public long getId() {
     return id;

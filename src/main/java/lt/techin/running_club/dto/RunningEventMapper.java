@@ -15,4 +15,10 @@ public class RunningEventMapper {
   public static RunningEventResponseDTO toRunningEventResponseDTO(RunningEvent runningEvent) {
     return new RunningEventResponseDTO(runningEvent.getId(), runningEvent.getName(), runningEvent.getCalendarDate(), runningEvent.getLocation(), runningEvent.getMaxParticipants());
   }
+
+  public static List<RunningEventResponseDTO> toRunningEventResponseDTOList(List<RunningEvent> runningEvents) {
+    List<RunningEventResponseDTO> result = runningEvents.stream().map(event -> new RunningEventResponseDTO(event.getId(), event.getName(), event.getCalendarDate(), event.getLocation(), event.getMaxParticipants())).toList();
+
+    return result;
+  }
 }

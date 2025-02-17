@@ -2,6 +2,7 @@ package lt.techin.running_club.dto;
 
 
 import lt.techin.running_club.model.User;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.List;
 

@@ -23,19 +23,28 @@ public class User implements UserDetails {
   @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "role_id"))
   private List<Role> roles;
 
-  @OneToMany(cascade = CascadeType.ALL)
+  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
   @JoinColumn(name = "user_id")
   private List<Registration> registrations;
 
 
-  public User(String username, String password, List<Role> roles) {
+  public User(String username, String password, List<Role> roles, List<Registration>registrations) {
     this.username = username;
     this.password = password;
     this.roles = roles;
+    this.registrations = registrations;
   }
 
   public User() {
 
+  }
+
+  public List<Registration> getRegistrations() {
+    return registrations;
+  }
+
+  public void setRegistrations(List<Registration> registrations) {
+    this.registrations = registrations;
   }
 
   public List<Role> getRoles() {
@@ -56,11 +65,6 @@ public class User implements UserDetails {
   }
 
   @Override
-  public Collection<? extends GrantedAuthority> getAuthorities() {
-    return roles;
-  }
-
-  @Override
   public String getPassword() {
     return password;
   }
@@ -71,5 +75,9 @@ public class User implements UserDetails {
 
   public long getId() {
     return id;
+  }
+  @Override
+  public Collection<? extends GrantedAuthority> getAuthorities() {
+    return roles;
   }
 }
